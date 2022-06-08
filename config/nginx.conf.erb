@@ -31,6 +31,7 @@ http {
 		server unix:/tmp/nginx.socket fail_timeout=0;
 	}
 
+	limit_req_zone $binary_remote_addr zone=one:10m rate=10r/m;
 	server {
 		listen <%= ENV["PORT"] %>;
 		server_name _;
@@ -46,6 +47,7 @@ http {
 			proxy_set_header Host $http_host;
 			proxy_redirect off;
 			proxy_pass http://app_server;
+			limit_req zone=one;
 		}
 	}
 }
